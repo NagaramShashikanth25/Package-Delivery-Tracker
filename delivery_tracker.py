@@ -5,31 +5,31 @@
 class Node:
     def __init__(self, stop):
         self.stop = stop
-        self.next = None   # pointer to next stop
+        self.next = None   
 
 
 # ─────────────────────────────────────────
-#  STACK — Status Log (most recent on top)
+#  STACK — Status Log 
 #  push = add event,  pop = undo event
 # ─────────────────────────────────────────
 class Stack:
     def __init__(self):
-        self.data = []   # Python list as stack
+        self.data = []   
 
     def push(self, msg):
-        self.data.append(msg)       # add to top
+        self.data.append(msg)       
 
     def pop(self):
         if not self.data:
             print("  Stack is empty!")
             return
-        print("  Undone:", self.data.pop())   # remove from top
+        print("  Undone:", self.data.pop())   
 
     def print_stack(self):
         if not self.data:
             print("  (empty)")
             return
-        for msg in reversed(self.data):       # most recent first
+        for msg in reversed(self.data):       
             print(" >>", msg)
 
 
@@ -41,7 +41,6 @@ class Package:
         self.id   = pid
         self.slot = slot
 
-        # Build route as linked list
         stops = ["Warehouse", "Sorting Hub", "Local Depot", "Delivered"]
         self.head = None
         tail = None
@@ -54,13 +53,12 @@ class Package:
                 tail.next = node
                 tail = node
 
-        self.current = self.head   # start at first stop
-
+        self.current = self.head   
     def advance(self):
         if not self.current.next:
             print("  Already delivered!")
             return
-        self.current = self.current.next    # move pointer — O(1)
+        self.current = self.current.next    
         print(f"  {self.id} moved to: {self.current.stop}")
 
     def print_route(self):
@@ -68,7 +66,7 @@ class Package:
         route = ""
         while node:
             if node == self.current:
-                route += f"[{node.stop}]"   # highlight current stop
+                route += f"[{node.stop}]"   
             else:
                 route += node.stop
             if node.next:
@@ -82,8 +80,7 @@ class Package:
 #  None = empty,  else holds package ID
 # ─────────────────────────────────────────
 SIZE      = 5
-warehouse = [None] * SIZE    # fixed-size array
-
+warehouse = [None] * SIZE    
 def find_slot():
     for i in range(SIZE):
         if warehouse[i] is None:
@@ -115,7 +112,7 @@ def main():
             print("Goodbye!")
             break
 
-        elif choice == "1":   # Add package — uses Array
+        elif choice == "1":  
             slot = find_slot()
             if slot == -1:
                 print("  Warehouse full!\n")
@@ -128,7 +125,7 @@ def main():
             print(f"  Added {pid} to slot {slot}")
             count += 1
 
-        elif choice == "2":   # Advance route — uses Linked List
+        elif choice == "2":   
             idx = int(input("  Package index (0-based): "))
             if idx < 0 or idx >= len(packages):
                 print("  Invalid index!")
@@ -136,18 +133,18 @@ def main():
                 packages[idx].advance()
                 log.push(f"{packages[idx].id} -> {packages[idx].current.stop}")
 
-        elif choice == "3":   # Show route — Linked List traversal
+        elif choice == "3":   
             idx = int(input("  Package index: "))
             if idx < 0 or idx >= len(packages):
                 print("  Invalid index!")
             else:
                 packages[idx].print_route()
 
-        elif choice == "4":   # Show stack
+        elif choice == "4":   
             print("  --- Status Log ---")
             log.print_stack()
 
-        elif choice == "5":   # Undo — Stack pop
+        elif choice == "5":   
             log.pop()
 
         else:
